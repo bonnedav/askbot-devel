@@ -43,7 +43,7 @@ class AskbotStaticSettings(AppConf):
     CAS_GET_EMAIL = None # python path to function
     CUSTOM_BADGES = None # python path to module with badges
     CUSTOM_USER_PROFILE_TAB = None # dict(NAME, SLUG, CONTEXT_GENERATOR
-                                   # the latter is path to func with 
+                                   # the latter is path to func with
                                    # variables (request, user)
     DEBUG_INCOMING_EMAIL = False
     EXTRA_SKINS_DIR = None #None or path to directory with skins
@@ -74,6 +74,7 @@ class AskbotStaticSettings(AppConf):
     SEARCH_FRONTEND_SRC_URL = None
     SEARCH_FRONTEND_CSS_URL = None
     WHITELISTED_IPS = tuple() # a tuple of whitelisted ips for moderation
+    FEDERATED_LOGIN_EMAIL_EDITABLE = True
 
     class Meta:
         prefix = 'askbot'
