@@ -552,7 +552,7 @@ def user_can_terminate_account(self, user):
             return False
         return perm == 'users'
 
-    # non-admins with terminate_accounts role cannot remove admins or moderators
+    # non-admins cannot remove admins or moderators
     if not self.is_administrator() and user.is_administrator_or_moderator():
         return False
 
