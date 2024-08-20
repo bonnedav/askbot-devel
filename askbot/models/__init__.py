@@ -551,6 +551,11 @@ def user_can_terminate_account(self, user):
         if is_admin: #admin can't remove own account, as as safeguard
             return False
         return perm == 'users'
+
+    # non-admins with terminate_accounts role cannot remove admins or moderators
+    if not self.is_administrator() and user.is_administrator_or_moderator():
+        return False
+
     return is_admin
 
 
