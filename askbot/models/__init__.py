@@ -896,6 +896,12 @@ def user_assert_can_vote_for_post(self, post=None, direction=None):
     :param:direction can be 'up' or 'down'
     :param:post can be instance of question or answer
     """
+
+    if post.deleted == True:
+        raise django_exceptions.PermissionDenied(
+            _('Deleted posts cannot be voted for')
+        )
+
     if self.pk == post.author_id:
         raise django_exceptions.PermissionDenied(
             _('Sorry, you cannot vote for your own posts')
@@ -1023,6 +1029,11 @@ def user_assert_can_post_question(self):
 def user_assert_can_post_answer(self, thread=None):
     """same as user_can_post_question
     """
+    if thread.deleted == True:
+        raise django_exceptions.PermissionDenied(
+            _('Deleted questions cannot be answered')
+        )
+
     limit_answers = askbot_settings.LIMIT_ONE_ANSWER_PER_USER
     if limit_answers and thread.has_answer_by_user(self):
         message = _(
@@ -1105,6 +1116,9 @@ def user_assert_can_convert_post(self, post=None):
 def user_can_post_comment(self, parent_post=None):
     """a simplified method to test ability to comment
     """
+    if parent_post and parrent_post.deleted == True:
+        return False
+
     if self.is_administrator_or_moderator():
         return True
 
@@ -1128,6 +1142,11 @@ def user_assert_can_post_comment(self, parent_post=None):
 
     the reason will be in text of exception
     """
+    if thread.deleted == True:
+        raise django_exceptions.PermissionDenied(
+            _('Deleted posted cannot be commented on')
+        )
+
     _assert_user_can(
         user=self,
         post=parent_post,
@@ -1331,6 +1350,10 @@ def user_assert_can_delete_answer(self, answer = None):
 
 def user_assert_can_close_question(self, question = None):
     assert(getattr(question, 'post_type', '') == 'question')
+    if question.deleted == True:
+        raise django_exceptions.PermissionDenied(
+            _('Deleted questions cannot be closed')
+        )
     min_rep_setting = askbot_settings.MIN_REP_TO_CLOSE_OTHERS_QUESTIONS
     _assert_user_can(
         user=self,
@@ -1346,6 +1369,10 @@ def user_assert_can_close_question(self, question = None):
 
 def user_assert_can_reopen_question(self, question = None):
     assert(question.post_type == 'question')
+    if question.deleted == True:
+        raise django_exceptions.PermissionDenied(
+            _('Deleted questions cannot be reopened')
+        )
     _assert_user_can(
         user=self,
         post=question,
