@@ -187,9 +187,9 @@ def onUnFlaggedItem(post, user, timestamp=None):
         post.deleted_at = None
         post.save()
 
-         if post.post_type == 'question':
-             post.thread.deleted = False
-             post.thread.save()
+        if post.post_type == 'question':
+            post.thread.deleted = False
+            post.thread.save()
 
         signals.after_post_restored.send(sender=post.__class__, instance=post,
                                          restored_by=user)
