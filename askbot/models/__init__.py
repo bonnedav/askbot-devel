@@ -1116,7 +1116,7 @@ def user_assert_can_convert_post(self, post=None):
 def user_can_post_comment(self, parent_post=None):
     """a simplified method to test ability to comment
     """
-    if parent_post and parrent_post.deleted == True:
+    if parent_post and parent_post.deleted == True:
         return False
 
     if self.is_administrator_or_moderator():
@@ -1142,9 +1142,9 @@ def user_assert_can_post_comment(self, parent_post=None):
 
     the reason will be in text of exception
     """
-    if thread.deleted == True:
+    if parent_post.deleted == True:
         raise django_exceptions.PermissionDenied(
-            _('Deleted posted cannot be commented on')
+            _('Deleted posts cannot be commented on')
         )
 
     _assert_user_can(
