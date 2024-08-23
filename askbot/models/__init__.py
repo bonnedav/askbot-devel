@@ -1302,7 +1302,7 @@ def user_assert_can_restore_post(self, post = None):
         return
     elif self.pk == post.author_id:
          raise django_exceptions.PermissionDenied(
-            _('You can only restore your own post if you deleted it')
+            _('You can only restore your own post if you deleted it yourself')
         )
 
 def user_assert_can_delete_question(self, question = None):
