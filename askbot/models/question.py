@@ -298,8 +298,11 @@ class ThreadManager(BaseQuerySetManager):
                 language_codes = list(dict(django_settings.LANGUAGES).keys())
             primary_filter['language_code__in'] = language_codes
 
-        if request_user.is_administrator_or_moderator and search_state.scope == 'deleted':
-            qs = self.filter(**primary_filter_del)
+        if request_user.is_authenticated and search_state.scope == 'deleted':
+            if request_user.is_administrator_or_moderator:
+                qs = self.filter(**primary_filter_del)
+            else:
+                qs = self.filter(**primary_filter)
         else:
             qs = self.filter(**primary_filter)
 
