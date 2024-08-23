@@ -17,4 +17,9 @@
     href="{{ search_state.change_scope('followed').full_url() }}"
   >{% trans %}FOLLOWED{% endtrans %}</a>
   {% endif %}
+  {% if request.user.is_administrator_or_moderator %}
+  <a class="js-scope-link {% if scope == 'deleted' %}selected with-selected-scope-icon{% endif %}"
+    href="{{ search_state.change_scope('deleted').full_url() }}"
+  >{% trans %}DELETED{% endtrans %}</a>
+  {% endif %}
 </nav>

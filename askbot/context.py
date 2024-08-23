@@ -99,7 +99,8 @@ def application_settings(request):
 
     need_scope_links = askbot_settings.ALL_SCOPE_ENABLED or \
         askbot_settings.UNANSWERED_SCOPE_ENABLED or \
-        (request.user.is_authenticated and askbot_settings.FOLLOWED_SCOPE_ENABLED)
+        (request.user.is_authenticated and askbot_settings.FOLLOWED_SCOPE_ENABLED) or \
+        request.user.is_administrator_or_moderator
 
     context = {
         'base_url': site_url(''),

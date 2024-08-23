@@ -283,6 +283,10 @@ class ThreadManager(BaseQuerySetManager):
             'posts__post_type': 'question',
             'posts__deleted': False
         }
+        primary_filter_del = {
+            'posts__post_type': 'question',
+            'posts__deleted': True
+        }
 
         lang_mode = askbot.get_lang_mode()
         if lang_mode == 'url-lang':
@@ -294,8 +298,10 @@ class ThreadManager(BaseQuerySetManager):
                 language_codes = list(dict(django_settings.LANGUAGES).keys())
             primary_filter['language_code__in'] = language_codes
 
-        # TODO: add a possibility to see deleted questions
-        qs = self.filter(**primary_filter)
+        if request_user.is_administrator_or_moderator and search_state.scope == 'deleted':
+            qs = self.filter(**primary_filter_del)
+        else:
+            qs = self.filter(**primary_filter)
 
         if askbot_settings.CONTENT_MODERATION_MODE == 'premoderation':
             if request_user.is_authenticated:
