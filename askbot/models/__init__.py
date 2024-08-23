@@ -1294,6 +1294,16 @@ def user_assert_can_restore_post(self, post = None):
     """can_restore_rule is the same as can_delete
     """
     self.assert_can_delete_post(post = post)
+    """extra checks
+    """
+    if self.is_administrator() or self.is_moderator():
+        return
+    if self.pk == post.deleted_by.pk:
+        return
+    elif self.pk == post.author_id:
+         raise django_exceptions.PermissionDenied(
+            _('You can only restore your own post if you deleted it')
+        )
 
 def user_assert_can_delete_question(self, question = None):
     """rules are the same as to delete answer,
