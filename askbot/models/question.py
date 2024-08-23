@@ -1003,6 +1003,8 @@ class Thread(models.Model):
         if user is None or user.is_anonymous:
             return self.posts.get_answers().filter(deleted=False)
         else:
+            #todo: fix caching post lists while showing deleated answers
+            #so that deleted answers can be restored.
             if user.is_administrator() or user.is_moderator():
                 return self.posts.get_answers(user=user)
             else:
