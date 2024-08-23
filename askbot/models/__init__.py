@@ -1532,6 +1532,10 @@ def user_assert_can_delete_comment(self, comment = None):
 
 
 def user_assert_can_revoke_old_vote(self, vote):
+    if post.deleted == True:
+        raise django_exceptions.PermissionDenied(
+            _('Deleted posts cannot be voted for')
+        )
     """raises exceptions.PermissionDenied if old vote
     cannot be revoked due to age of the vote
     """
