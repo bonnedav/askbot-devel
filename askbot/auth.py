@@ -98,9 +98,13 @@ def onFlaggedItem(post, user, timestamp=None):
         reputation.save()
 
         post.deleted = True
-        # post.deleted_at = timestamp
-        # post.deleted_by = Admin
+        post.deleted_at = timestamp
+        post.deleted_by = user
         post.save()
+
+        if post.post_type == 'question':
+            post.thread.deleted = True
+            post.thread.save()
 
         signals.after_post_removed.send(sender=post.__class__, instance=post,
                                         deleted_by=user)
@@ -179,7 +183,13 @@ def onUnFlaggedItem(post, user, timestamp=None):
         reputation.save()
 
         post.deleted = False
+        post.deleted_by = None
+        post.deleted_at = None
         post.save()
+
+         if post.post_type == 'question':
+             post.thread.deleted = False
+             post.thread.save()
 
         signals.after_post_restored.send(sender=post.__class__, instance=post,
                                          restored_by=user)
